@@ -19,7 +19,7 @@ class WeatherController extends Controller
             Yii::$app->session->setFlash('info', 'Please register for show weather list');
             return $this->redirect('/auth/login');
         }
-        $now = (new DateTime())->format(ISO_DATE_FORMAT);
+        $now = (new DateTime(s))->format(ISO_DATE_FORMAT);
         $query = Weather::find()->with([
             'windDirection', 'precipitationType', 'settlement'
         ])->where(['date' => $now]);
