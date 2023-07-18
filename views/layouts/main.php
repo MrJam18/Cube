@@ -36,23 +36,31 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
+    $items = [
+        ['label' => 'Weather', 'url' => ['/weather/list']],
+        ['label' => 'About', 'url' => ['/site/about']],
+    ];
+    if(isAdmin()) {
+        $items[] = ['label' => 'Users', 'url' => ['/users/list']];
+    }
+    if(\Yii::$app->user->isGuest) {
+        $items[] = ['label' => 'Login', 'url' => ['/auth/login'], 'options' => ['class' => 'menu__auth-link']];
+    }
+    else {
+        $items[] = '<li class="nav-item menu__auth-link">'
+            . Html::beginForm(['/auth/logout'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->email . ')',
+                ['class' => 'nav-link btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
+
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Weather', 'url' => ['/weather/list']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/auth/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['/auth/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->email . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-        ]
+        'options' => ['class' => 'navbar-nav w-100'],
+        'items' => $items
     ]);
     NavBar::end();
     ?>

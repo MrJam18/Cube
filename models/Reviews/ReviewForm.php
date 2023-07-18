@@ -21,8 +21,17 @@ class ReviewForm extends Model
 
     function createReview(): bool
     {
-        if($this->validate()) {
+        if ($this->validate()) {
             $review = new Review();
+            $this->saveReview($review);
+            return true;
+        }
+        return false;
+    }
+    function updateReview(string $reviewId): bool
+    {
+        if ($this->validate()) {
+            $review = Review::findOne((int)$reviewId);
             $this->saveReview($review);
             return true;
         }

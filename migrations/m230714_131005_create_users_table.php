@@ -20,7 +20,9 @@ class m230714_131005_create_users_table extends Migration
             'password' => $this->string()->notNull(),
             'auth_key' => $this->string()->notNull(),
             'access_token' => $this->string()->null(),
-            'email' => $this->string()->notNull()->unique()
+            'email' => $this->string()->notNull()->unique(),
+            'created_at' => $this->timestamp()->notNull(),
+            'updated_at' => $this->timestamp()->notNull(),
         ]);
         $this->addForeignKey('fk-users-role_id', 'users', 'role_id', 'user_roles', 'id');
     }

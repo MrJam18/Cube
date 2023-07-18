@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace app\models\Auth;
 
-use Exception;
 use yii\base\Model;
+use yii\db\IntegrityException;
 
 class RegistrationForm extends Model
 {
@@ -34,9 +34,12 @@ class RegistrationForm extends Model
             $user->email = $this->email;
             try {
                 $user->save();
-            } catch (Exception) {
-                $this->addError('email', 'this email already in use');
-                return false;
+            } catch (IntegrityException $exception) {
+                if($exception->getCode() === '23000') {
+                    $this->addError('email', 'this email already in use');
+                    return false;
+                }
+                throw $exception;
             }
             return true;
         }

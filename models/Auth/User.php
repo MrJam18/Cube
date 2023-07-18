@@ -3,6 +3,8 @@
 namespace app\models\Auth;
 
 use app\models\Base\BaseModel;
+use app\models\Traits\USTimestampsTrait;
+use DateTime;
 use yii\db\ActiveQuery;
 
 /**
@@ -14,11 +16,12 @@ use yii\db\ActiveQuery;
  * @property string $access_token;
  * @property string $email;
  * @property UserRole $role;
+ * @property string $created_at;
+ * @property string $updated_at;
  */
 class User extends BaseModel implements \yii\web\IdentityInterface
 {
-
-
+    use USTimestampsTrait;
     /**
      * {@inheritdoc}
      */
@@ -96,5 +99,12 @@ class User extends BaseModel implements \yii\web\IdentityInterface
     function getFullName(): string
     {
         return "$this->name $this->surname";
+    }
+
+    public function behaviors(): array
+    {
+        return [
+            updateTimestampsBehavior()
+        ];
     }
 }
